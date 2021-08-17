@@ -31,6 +31,7 @@ class LoginSuccessActivity : AppCompatActivity() {
         binding = ActivityLoginSuccessBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context=this@LoginSuccessActivity
+        getSupportActionBar()!!.hide();
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         strUsername = intent.getStringExtra("username").toString()
 
@@ -51,13 +52,12 @@ class LoginSuccessActivity : AppCompatActivity() {
             GlobalScope.launch {
                 loginViewModel.deleteUser(context, strUsername)
                 withContext(Dispatchers.Main){
-
                     binding.txtName.text = "User deleted"
                 }
             }
         }
-        binding.imgToSave.setOnClickListener {
-            loginViewModel.saveImageToInternalStorage(context,R.drawable.durdledoor)
+        binding.btnSave.setOnClickListener {
+            loginViewModel.copyFileToInternalStorage(context,R.drawable.durdledoor)
             Toast.makeText(this, "Image saved to Internal Storage", Toast.LENGTH_SHORT).show()
         }
 

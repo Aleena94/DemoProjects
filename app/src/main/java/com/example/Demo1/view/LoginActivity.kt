@@ -5,9 +5,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.Demo1.R
 import com.example.Demo1.databinding.ActivityLoginBinding
 import com.example.Demo1.viewModel.LoginViewModel
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     lateinit var loginViewModel: LoginViewModel
@@ -22,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context = this@LoginActivity
+        getSupportActionBar()!!.hide();
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         binding.btnLogin.setOnClickListener {
 
@@ -33,7 +36,10 @@ class LoginActivity : AppCompatActivity() {
             } else if (strPassword.isEmpty()) {
                 binding.txtPassword.error = "Enter Password"
             } else {
-                loginViewModel.insertData(context, strUsername, strPassword)
+                lifecycleScope.launch {
+                    loginViewModel.insertData(context, strUsername, strPassword)
+
+                }
                 val intent = Intent(this, LoginSuccessActivity::class.java)
                 intent.putExtra("username", strUsername);
                 startActivity(intent)
